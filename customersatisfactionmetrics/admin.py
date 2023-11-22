@@ -2,14 +2,15 @@ from django.contrib import admin
 
 from .models import Question, Response, Survey
 
+
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('text', 'survey', 'order', 'response_type')  # Add other relevant fields here
-    list_editable = ('order',)  # Allow 'order' to be editable in the list view
+    list_display = ('text', 'survey', 'order', 'response_type', 'is_required')  # Add 'is_required' here
+    list_editable = ('order', 'is_required')  # Make 'is_required' editable in list view
     ordering = ('survey', 'order')  # Order by survey first, then by question order
 
     # Optionally, you can add a search field or filters if you have many questions
     search_fields = ['text']
-    list_filter = ['survey']
+    list_filter = ['survey', 'response_type', 'is_required']  # Add 'is_required' to filters
 
 
 class ResponseAdmin(admin.ModelAdmin):

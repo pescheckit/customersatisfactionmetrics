@@ -16,6 +16,7 @@ class Question(models.Model):
     int_max = models.IntegerField(null=True, blank=True)  # Maximum value for INT response type
     # Add an order field
     order = models.IntegerField(default=0)
+    is_required = models.BooleanField(default=True)  # Add this line
 
     class Meta:
         ordering = ['order']  # This ensures questions are ordered by this field by default

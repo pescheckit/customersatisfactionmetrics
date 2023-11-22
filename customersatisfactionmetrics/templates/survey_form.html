@@ -14,11 +14,10 @@
         {% for field in form %}
             <div>
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {% if not field.field.required %}<span>(Optional)</span>{% endif %}
                 {{ field }}
                 {% if field.errors %}
-                    <div class="error">
-                        {{ field.errors }}
-                    </div>
+                    <div class="error">{{ field.errors }}</div>
                 {% endif %}
             </div>
         {% endfor %}
