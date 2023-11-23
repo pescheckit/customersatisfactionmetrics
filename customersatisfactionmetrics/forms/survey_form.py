@@ -20,7 +20,7 @@ class SurveyForm(forms.Form):
 
         for question in survey.questions.order_by('order').all():
             field_name = f'question_{question.id}'
-            field_required = question.is_required  # Get the is_required attribute
+            field_required = question.is_required
 
             if survey.survey_type == 'NPS':
                 self.fields[field_name] = forms.ChoiceField(
