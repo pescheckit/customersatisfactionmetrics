@@ -1,4 +1,12 @@
 #!/usr/bin/env python
+"""
+Django's command-line utility for administrative tasks.
+
+This script allows you to perform various Django administrative tasks such as running
+the development server, creating migrations, applying migrations, and running tests.
+It is a thin wrapper around `django.core.management.execute_from_command_line`.
+"""
+
 import os
 import sys
 

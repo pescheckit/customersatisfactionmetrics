@@ -1,3 +1,10 @@
+"""
+This module defines the Response model for the Customer Satisfaction Metrics application.
+
+It contains the Response class, which represents the responses given by users to various
+survey questions, including the type of response and associated user details.
+"""
+
 from django.conf import settings
 from django.db import models
 
@@ -5,6 +12,18 @@ from .questions import Question
 
 
 class Response(models.Model):
+    """
+    Represents a user's response to a survey question.
+
+    Attributes:
+        user (ForeignKey): The user who provided the response.
+        question (ForeignKey): The question to which the response relates.
+        response_type (CharField): The type of response (CSAT, NPS, CES, GENERIC).
+        text (TextField): The text content of the response.
+        ip_address (GenericIPAddressField): The IP address of the user at the time of response.
+        user_agent (TextField): The user agent of the user's device for the response.
+    """
+
     RESPONSE_TYPES = (
         ('CSAT', 'Customer Satisfaction'),
         ('NPS', 'Net Promoter Score'),
@@ -19,4 +38,4 @@ class Response(models.Model):
     user_agent = models.TextField()
 
     def __str__(self):
-        return self.text
+        return str(self.text)  # Ensure that the returned value is a string

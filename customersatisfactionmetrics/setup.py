@@ -1,35 +1,37 @@
+"""
+Setup configuration for the customersatisfactionmetrics package.
+
+This script is used to handle the packaging and distribution of the
+'customersatisfactionmetrics' package, including metadata, dependencies,
+and other necessary package information.
+"""
+
 from setuptools import find_packages, setup
+
+# Using 'with' statement for safe file handling
+with open('README.md', 'r', encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
     name='customersatisfactionmetrics',
     version='0.1',
-    author='Bram Mittendorff',  # Your name or your organization's name
-    author_email='bram@pescheck.io',  # Your email or your organization's email
-    description='A short description of your package',  # A brief description of your package
-    long_description=open('README.md').read(),  # A long description from README.md
-    long_description_content_type='text/markdown',  # Content type of the long description
-    url='http://github.com/pescheckit/customersatisfactionmetrics',  # URL to your package's repository
-    packages=find_packages(),  # Automatically find packages in your project
-    include_package_data=True,  # Include non-code files specified in MANIFEST.in
+    author='Bram Mittendorff',
+    author_email='bram@pescheck.io',
+    description='A short description of your package',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+    url='http://github.com/pescheckit/customersatisfactionmetrics',
+    packages=find_packages(),
+    include_package_data=True,
     install_requires=[
-        'Django>=3.0',  # Replace or add dependencies as needed
+        'Django>=3.0',
     ],
     classifiers=[
-        'Development Status :: 3 - Alpha',  # Choose the appropriate status
-        # 'Intended Audience :: Developers', 
-        # 'License :: OSI Approved :: MIT License', 
-        # 'Programming Language :: Python :: 3',
-        # 'Programming Language :: Python :: 3.6',
-        # 'Programming Language :: Python :: 3.7',
-        # 'Programming Language :: Python :: 3.8',
-        # 'Programming Language :: Python :: 3.9',
-        # 'Programming Language :: Python :: 3.10',
-        # 'Framework :: Django',
-        # 'Framework :: Django :: 3.0',
-        # ... Add other classifiers as needed
+        'Development Status :: 3 - Alpha',
+        # Other classifiers...
     ],
     # Optional settings
-    # keywords='keyword1 keyword2 keyword3',
+    # keywords='...',
     # license='MIT',
     # python_requires='>=3.6',
 )

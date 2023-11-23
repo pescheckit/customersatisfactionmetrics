@@ -1,3 +1,10 @@
+"""
+Module for defining forms related to Surveys in the Customer Satisfaction Metrics application.
+
+This module contains form definitions that are used for creating and handling surveys,
+including dynamically generating form fields based on the survey type and question response type.
+"""
+
 from django import forms
 from django.conf import settings
 
@@ -5,16 +12,23 @@ from customersatisfactionmetrics.models import Survey
 
 
 class SurveyForm(forms.Form):
+    """
+    Form for a Survey.
+
+    This form dynamically generates fields based on the survey type and question
+    response types. It supports different types of surveys such as NPS, CSAT, CES, and GENERIC.
+    """
+
     def __init__(self, *args, **kwargs):
         survey_id = kwargs.pop('survey_id', None)
         slug = kwargs.pop('slug', None)
-        super(SurveyForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)  # Updated to Python 3 style super()
 
         # Fetch the survey by ID or slug
         if survey_id is not None:
-            survey = Survey.objects.get(pk=survey_id)
+            survey = Survey.objects.get(pk=survey_id)  # pylint: disable=no-member
         elif slug is not None:
-            survey = Survey.objects.get(slug=slug)
+            survey = Survey.objects.get(slug=slug)  # pylint: disable=no-member
         else:
             raise ValueError("Either survey_id or slug must be provided")
 

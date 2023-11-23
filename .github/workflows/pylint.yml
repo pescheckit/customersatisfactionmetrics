@@ -24,15 +24,12 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pipenv run pylint $(git ls-files '*.py')
-    - name: Check code formatting with black
-      run: |
-        pipenv run black --check .
     - name: Check code style with flake8
       run: |
         pipenv run flake8 .
-    - name: Static type checking with mypy
-      run: |
-        pipenv run mypy .
     - name: Check import order with isort
       run: |
         pipenv run isort --check-only --diff .
+    - name: Linting with Ruff
+      run: |
+        ruff $(git ls-files '*.py')

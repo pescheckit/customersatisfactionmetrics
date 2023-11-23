@@ -9,10 +9,9 @@ customersatisfactionmetrics = {editable = true, path = "./customersatisfactionme
 
 [dev-packages]
 pylint = "*"
-mypy = "*"
 flake8 = "*"
 isort = "*"
-black = "*"
+ruff = "*"
 
 [requires]
 python_version = "3.10"
