@@ -261,5 +261,3 @@ webpack-stats.json
 .vscode/launch.json
 .tool-versions
 **/*.mo
-
-customer_satisfaction_metrics/*

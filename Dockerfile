@@ -8,18 +8,20 @@ WORKDIR /code
 # Copy Pipfile and Pipfile.lock
 COPY Pipfile Pipfile.lock /code/
 
-# Copy the Django app and the locally developed package
-COPY customer_satisfaction_metrics /code/customer_satisfaction_metrics
+# Install the local package
 COPY customersatisfactionmetrics /code/customersatisfactionmetrics
 
 # Install pipenv and dependencies
 RUN pip install pipenv && pipenv install --system --deploy
 
-# Install the local package
 RUN pip install /code/customersatisfactionmetrics
+
+# Ensure Django is installed as part of the dependencies before this step
+# Create the Django app
+RUN mkdir /code/customer_satisfaction_metrics
+RUN django-admin startapp customer_satisfaction_metrics /code/customer_satisfaction_metrics
 
 # Copy other necessary files
 COPY manage.py /code/
-# Copy any other required files or directories
 
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
