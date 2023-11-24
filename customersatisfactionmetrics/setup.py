@@ -27,6 +27,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'Django>=3.0',
+        'setuptools_scm',
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
@@ -37,3 +38,4 @@ setup(
     # license='MIT',
     # python_requires='>=3.6',
 )
+``
