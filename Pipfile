@@ -6,12 +6,12 @@ name = "pypi"
 [packages]
 django = "*"
 customersatisfactionmetrics = {editable = true, path = "./customersatisfactionmetrics"}
+setuptools-scm = "*"
 
 [dev-packages]
 pylint = "*"
 flake8 = "*"
 isort = "*"
-setuptools-scm = "*"
 
 [requires]
 python_version = "3.10"

@@ -28,7 +28,7 @@ jobs:
     - name: Install dependencies with Pipenv
       run: |
         pipenv install setuptools-scm
-        pipenv install
+        pipenv install --dev
 
     - name: Build package
       run: pipenv run python -m customersatisfactionmetrics

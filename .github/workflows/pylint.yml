@@ -20,6 +20,7 @@ jobs:
         pip install pipenv ruff
     - name: Install dependencies with Pipenv
       run: |
+        pipenv install setuptools-scm
         pipenv install --dev
     - name: Analysing the code with pylint
       run: |
