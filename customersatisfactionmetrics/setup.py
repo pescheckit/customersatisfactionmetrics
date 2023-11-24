@@ -18,7 +18,6 @@ setup(
     version=setuptools_scm.get_version(),
     use_scm_version=True,
     setup_requires=['setuptools_scm'],
-    use_scm_version={'fallback_version': '0.0.1'},
     author='Bram Mittendorff',
     author_email='bram@pescheck.io',
     description='A short description of your package',
