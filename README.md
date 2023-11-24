@@ -6,7 +6,7 @@ Welcome to the Django Survey Project! This repository hosts a collection of Djan
 
 This project is structured as follows:
 
-- **Django Survey App**: A Django application for creating and managing surveys, including CSAT, NPS, CES, and Generic Surveys. It's designed to support both anonymous and logged-in user responses, with comprehensive user metadata tracking. [Read more about the Django Survey App](customersatisfactionmetrics/README.md).
+- **Django Survey App**: A Django application for creating and managing surveys, including CSAT, NPS, CES, and Generic Surveys. It's designed to support both anonymous and logged-in user responses, with comprehensive user metadata tracking. [Read more about the Django Survey App](src/customersatisfactionmetrics/README.md).
 
 ## Getting Started
 
