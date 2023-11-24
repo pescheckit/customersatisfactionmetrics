@@ -4,6 +4,7 @@ This module is the entry point for the application. It contains
 the main function which kicks off the execution of the application.
 """
 
+
 def main():
     """Start the Customer Satisfaction Metrics application.
 

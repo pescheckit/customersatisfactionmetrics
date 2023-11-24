@@ -6,6 +6,7 @@ This script is used to handle the packaging and distribution of the
 and other necessary package information.
 """
 
+import setuptools_scm
 from setuptools import find_packages, setup
 
 # Using 'with' statement for safe file handling
@@ -14,7 +15,8 @@ with open('README.md', 'r', encoding='utf-8') as f:
 
 setup(
     name='customersatisfactionmetrics',
-    version='0.0.1',
+    version=setuptools_scm.get_version(),
+    setup_requires=['setuptools_scm'],
     author='Bram Mittendorff',
     author_email='bram@pescheck.io',
     description='A short description of your package',
