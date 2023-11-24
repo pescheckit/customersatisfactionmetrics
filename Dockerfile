@@ -9,7 +9,7 @@ WORKDIR /code
 COPY Pipfile Pipfile.lock /code/
 
 # Install the local package
-COPY customersatisfactionmetrics /code/customersatisfactionmetrics
+COPY src/customersatisfactionmetrics /code/customersatisfactionmetrics
 
 # Install pipenv and dependencies
 RUN pip install pipenv && pipenv install --system --deploy
