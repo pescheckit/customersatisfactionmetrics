@@ -16,7 +16,7 @@ with open('README.md', 'r', encoding='utf-8') as f:
 setup(
     name='customersatisfactionmetrics',
     version=setuptools_scm.get_version(),
-    use_scm_version=True,
+    use_scm_version={'fallback_version': '0.0.1'},
     setup_requires=['setuptools_scm'],
     author='Bram Mittendorff',
     author_email='bram@pescheck.io',
