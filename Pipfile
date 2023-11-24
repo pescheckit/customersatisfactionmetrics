@@ -5,8 +5,8 @@ name = "pypi"
 
 [packages]
 django = "*"
-customersatisfactionmetrics = {editable = true, path = "./customersatisfactionmetrics"}
 setuptools-scm = "*"
+customersatisfactionmetrics = {editable = true, path = "./customersatisfactionmetrics"}
 
 [dev-packages]
 pylint = "*"
