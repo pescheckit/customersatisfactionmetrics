@@ -122,3 +122,9 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Set to False to disable the survey by ID URL, keep in mind when enabling you can enumerate the survey urls
+SURVEY_ENABLE_ID_URL = False
+
+# Set to True to use integer fields instead of other field types
+SURVEY_USE_INTEGER_FIELD = False
