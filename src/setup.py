@@ -53,7 +53,8 @@ setup(
         'user engagement',
         'metadata tracking',
         'response analysis',
-        'Django application
+        'Django application',
     ],
     license='MIT',
 )
+1
