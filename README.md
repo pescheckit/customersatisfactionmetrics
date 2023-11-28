@@ -10,14 +10,29 @@ This project is structured as follows:
 
 ## Getting Started
 
-To get started with this project:
+**Docker Compose Integration**
 
-1. Clone the repository:
-   ```
+In addition to the standard setup, our Django Survey Project supports Docker Compose for easy and efficient deployment. With Docker Compose, you can quickly start the entire project on your local machine or a server, simplifying the process of development and testing.
+
+### Starting with Docker Compose
+
+To start the project using Docker Compose, follow these steps:
+
+1. Ensure you have Docker and Docker Compose installed on your system. If not, you can download and install them from [Docker's official website](https://www.docker.com/get-started).
+
+2. Clone the repository (if you haven't already):
+   ```bash
    git clone git@github.com:pescheckit/customersatisfactionmetrics.git
    ```
-2. Navigate to the desired component (e.g., Django Survey App) and follow the setup instructions in the respective README file.
 
+3. Navigate to the root directory of the project where the `docker-compose.yml` file is located.
+
+4. Run the following command to start the services defined in the `docker-compose.yml` file:
+   ```bash
+   docker compose up
+   ```
+
+5. Once the services are up and running, you can access the Django Survey App in your browser. Typically, it will be hosted at `http://localhost:8000` or a similar local address (check your Docker Compose logs for the exact URL).
 ## Features
 
 - **Diverse Survey Types**: Support for various survey types including CSAT, NPS, CES, and Generic Surveys.
