@@ -27,12 +27,22 @@ To start the project using Docker Compose, follow these steps:
 
 3. Navigate to the root directory of the project where the `docker-compose.yml` file is located.
 
-4. Run the following command to start the services defined in the `docker-compose.yml` file:
+4. Create a sqlite3 file:
+   ```bash
+   touch db.sqlite3
+   ```
+
+5. Run the following command to start the services defined in the `docker-compose.yml` file:
    ```bash
    docker compose up
    ```
 
-5. Once the services are up and running, you can access the Django Survey App in your browser. Typically, it will be hosted at `http://localhost:8000` or a similar local address (check your Docker Compose logs for the exact URL).
+6. Run the migrations:
+   ```bash
+   docker compose exec web python manage.py migrate
+   ```
+
+7. Once the services are up and running, you can access the Django Survey App in your browser. Typically, it will be hosted at `http://localhost:8000` or a similar local address (check your Docker Compose logs for the exact URL).
 
 ## Features
 
