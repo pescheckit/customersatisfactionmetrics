@@ -30,7 +30,7 @@ jobs:
         pipenv install --dev
 
     - name: Build package
-      run: pipenv run python -m build customersatisfactionmetrics
+      run: pipenv run python -m build src/customersatisfactionmetrics
 
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29

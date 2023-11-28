@@ -5,8 +5,8 @@ name = "pypi"
 
 [packages]
 django = "*"
-customersatisfactionmetrics = {editable = true, path = "."}
 build = "*"
+customersatisfactionmetrics = {editable = true, path = "."}
 
 [dev-packages]
 pylint = "*"

@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.10
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -9,17 +9,14 @@ WORKDIR /code
 COPY Pipfile Pipfile.lock /code/
 
 # Install the local package
-COPY customersatisfactionmetrics /code/customersatisfactionmetrics
+COPY src/customersatisfactionmetrics /code/src/customersatisfactionmetrics
+COPY customer_satisfaction_metrics /code/customer_satisfaction_metrics
 
 # Install pipenv and dependencies
-RUN pip install pipenv && pipenv install --system --deploy
+RUN pip install pipenv
+RUN pipenv install --system --deploy
 
-RUN pip install /code/customersatisfactionmetrics
-
-# Ensure Django is installed as part of the dependencies before this step
-# Create the Django app
-RUN mkdir /code/customer_satisfaction_metrics
-RUN django-admin startapp customer_satisfaction_metrics /code/customer_satisfaction_metrics
+RUN pipenv install ./src/customersatisfactionmetrics
 
 # Copy other necessary files
 COPY manage.py /code/

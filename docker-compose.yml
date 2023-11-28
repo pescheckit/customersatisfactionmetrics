@@ -7,6 +7,7 @@ services:
     volumes:
       - .:/code
       - ./db.sqlite3:/code/db.sqlite3
-      - ./customersatisfactionmetrics:/code/customersatisfactionmetrics
+      - ./src/customersatisfactionmetrics:/code/src/customersatisfactionmetrics
+      - ./customer_satisfaction_metrics:/code/customer_satisfaction_metrics
     ports:
       - "8000:8000"

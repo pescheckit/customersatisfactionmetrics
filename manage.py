@@ -10,6 +10,9 @@ It is a thin wrapper around `django.core.management.execute_from_command_line`.
 import os
 import sys
 
+# Add this line before other imports
+sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
+
 if __name__ == '__main__':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'customer_satisfaction_metrics.settings')
     try:
