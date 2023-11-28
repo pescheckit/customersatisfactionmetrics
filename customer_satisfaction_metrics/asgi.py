@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
 import os
 import sys
 
-from django.core.asgi import get_asgi_application
+from django.core.asgi import get_asgi_application  # pylint: disable=import-error,no-name-in-module
 
 # Add this line before other imports
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'src'))
