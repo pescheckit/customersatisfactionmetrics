@@ -9,14 +9,14 @@ WORKDIR /code
 COPY Pipfile Pipfile.lock /code/
 
 # Install the local package
-COPY src/customersatisfactionmetrics /code/src/customersatisfactionmetrics
+COPY src/ /code/src/
 COPY customer_satisfaction_metrics /code/customer_satisfaction_metrics
 
 # Install pipenv and dependencies
 RUN pip install pipenv
 RUN pipenv install --system --deploy
 
-RUN pipenv install ./src/customersatisfactionmetrics
+RUN pipenv install ./src/
 
 # Copy other necessary files
 COPY manage.py /code/

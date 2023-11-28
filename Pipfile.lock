@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7847acdbbeb5918b2818b396fcadf28d57cad8cd6371dad133025a45720215b7"
+            "sha256": "7375dcaeb27c019d4fec71d17d3fb7a7b2e0c96dd274f67cbca51111a45df24a"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -34,7 +34,7 @@
         },
         "customersatisfactionmetrics": {
             "editable": true,
-            "path": "./src/customersatisfactionmetrics"
+            "path": "./src"
         },
         "django": {
             "hashes": [
