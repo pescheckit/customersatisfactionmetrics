@@ -10,10 +10,10 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
 import os
 import sys
 
+from django.core.wsgi import get_wsgi_application
+
 # Add this line before other imports
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'src'))
-
-from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'customer_satisfaction_metrics.settings')
 
