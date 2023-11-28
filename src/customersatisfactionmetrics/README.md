@@ -4,6 +4,7 @@ This Django application allows you to create and manage surveys including CSAT, 
 
 ## Setup and Installation
 
+
 1. **Run Migrations**
 
    ```
@@ -48,10 +49,10 @@ Contributions to this project are welcome. Please fork the repository and submit
 
 ## License
 
-[Your chosen license]
+This project is licensed under [MIT License](LICENSE). See the [LICENSE](LICENSE) file in the respective folders for more details.
 
 ## Contact
 
-[Your contact information]
+For any queries or further information, please contact us at devops@pescheck.nl.
 
-
+Thank you for your interest in our Django Survey Project!

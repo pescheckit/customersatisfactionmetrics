@@ -37,10 +37,10 @@ Please read through the individual README files of each component for specific g
 
 ## License
 
-This project is licensed under [Your chosen license]. See the LICENSE file in the respective folders for more details.
+This project is licensed under [MIT License](LICENSE). See the [LICENSE](LICENSE) file in the respective folders for more details.
 
 ## Contact
 
-For any queries or further information, please contact us at [Your contact information].
+For any queries or further information, please contact us at devops@pescheck.nl.
 
 Thank you for your interest in our Django Survey Project!
