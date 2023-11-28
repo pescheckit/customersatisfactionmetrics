@@ -5,7 +5,6 @@ services:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/code
       - ./db.sqlite3:/code/db.sqlite3
       - ./src/customersatisfactionmetrics:/code/src/customersatisfactionmetrics
       - ./customer_satisfaction_metrics:/code/customer_satisfaction_metrics

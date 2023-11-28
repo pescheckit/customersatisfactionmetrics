@@ -33,6 +33,7 @@ To start the project using Docker Compose, follow these steps:
    ```
 
 5. Once the services are up and running, you can access the Django Survey App in your browser. Typically, it will be hosted at `http://localhost:8000` or a similar local address (check your Docker Compose logs for the exact URL).
+
 ## Features
 
 - **Diverse Survey Types**: Support for various survey types including CSAT, NPS, CES, and Generic Surveys.
