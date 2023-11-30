@@ -1,1 +1,1 @@
-include src/customersatisfactionmetrics/templates/*.html
+include customersatisfactionmetrics/templates/*.html
