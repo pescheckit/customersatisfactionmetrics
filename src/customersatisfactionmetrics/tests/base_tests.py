@@ -1,4 +1,14 @@
-# customersatisfactionmetrics/tests/base.py
+"""
+Base test module for the Customer Satisfaction Metrics application.
+
+This module defines a base test case class used across various test suites
+within the application. It provides a common setup for creating essential
+models like Surveys and Questions, thereby reducing code redundancy and
+ensuring consistency in test environments.
+
+The BaseSurveyTestCase class is designed to be inherited by other test
+classes that require a pre-configured survey and question setup.
+"""
 import logging
 
 from django.test import TestCase
@@ -18,7 +28,6 @@ class BaseSurveyTestCase(TestCase):
     It creates a survey and a question instance that can be used across different test classes,
     reducing the need for repetitive code and ensuring consistency in test setup.
     """
-
     def setUp(self):
         """
         Set up a common test environment for Survey-related tests.
