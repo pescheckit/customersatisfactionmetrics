@@ -11,6 +11,14 @@ logging.basicConfig(level=logging.INFO)
 
 
 class BaseSurveyTestCase(TestCase):
+    """
+    Base class for survey-related test cases in the Customer Satisfaction Metrics application.
+
+    This class provides a common setup for tests that involve Survey and Question models.
+    It creates a survey and a question instance that can be used across different test classes,
+    reducing the need for repetitive code and ensuring consistency in test setup.
+    """
+
     def setUp(self):
         """
         Set up a common test environment for Survey-related tests.
