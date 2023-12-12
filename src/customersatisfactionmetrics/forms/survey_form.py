@@ -37,15 +37,9 @@ class SurveyForm(forms.Form):
             field_required = question.is_required
 
             if survey.survey_type == 'NPS':
-                self.fields[field_name] = forms.ChoiceField(
-                    label=question.text, choices=[(i, str(i)) for i in range(0, 11)],
-                    required=field_required,
-                )
+                self.fields[field_name] = self.create_generic_choice_field(question)
             elif survey.survey_type in ['CSAT', 'CES']:
-                self.fields[field_name] = forms.ChoiceField(
-                    label=question.text, choices=[(i, str(i)) for i in range(1, 6)],
-                    required=field_required,
-                )
+                self.fields[field_name] = self.create_generic_choice_field(question)
             elif survey.survey_type == 'GENERIC':
                 if question.response_type == 'INT':
                     if getattr(settings, 'SURVEY_USE_INTEGER_FIELD', True):
@@ -56,14 +50,7 @@ class SurveyForm(forms.Form):
                             required=field_required
                         )
                     else:
-                        # Define a range based on int_min and int_max
-                        range_choices = [(i, str(i)) for i in range(question.int_min, question.int_max + 1)]
-                        self.fields[field_name] = forms.ChoiceField(
-                            label=question.text,
-                            choices=range_choices,
-                            widget=forms.RadioSelect,
-                            required=field_required
-                        )
+                        self.fields[field_name] = self.create_generic_choice_field(question)
                 elif question.response_type == 'TEXT':
                     self.fields[field_name] = forms.CharField(
                         label=question.text,
@@ -72,3 +59,19 @@ class SurveyForm(forms.Form):
                     )
                 elif question.response_type == 'BOOL':
                     self.fields[field_name] = forms.BooleanField(label=question.text, required=False)
+
+    def create_generic_choice_field(self, question):
+        """
+        Create a choice field for a GENERIC survey with min and max labels.
+        """
+        range_choices = [(i, str(i)) for i in range(question.int_min, question.int_max + 1)]
+        if question.min_label and question.max_label:
+            range_choices = [(question.int_min, question.min_label)] + \
+                range_choices[1:-1] + \
+                [(question.int_max, question.max_label)]
+        return forms.ChoiceField(
+            label=question.text,
+            choices=range_choices,
+            widget=forms.RadioSelect,
+            required=question.is_required
+        )

@@ -16,13 +16,11 @@ class QuestionAdmin(admin.ModelAdmin):
     Includes configurations for display and editing in the Django admin site.
     """
 
-    list_display = ('text', 'survey', 'order', 'response_type', 'is_required')
+    list_display = ('text', 'survey', 'order', 'response_type', 'is_required', 'min_label', 'max_label')
     list_editable = ('order', 'is_required')
     ordering = ('survey', 'order')
     search_fields = ['text']
     list_filter = ['survey', 'response_type', 'is_required']
-
-    # Additional methods and configurations can be added here as needed.
 
 
 class ResponseAdmin(admin.ModelAdmin):
@@ -32,7 +30,7 @@ class ResponseAdmin(admin.ModelAdmin):
     and filtering options.
     """
 
-    list_display = ('question', 'user', 'response_type', 'shortened_text', 'ip_address', 'user_agent')
+    list_display = ('question', 'user', 'response_type', 'shortened_text', 'ip_address', 'user_agent', 'session_id')
     list_filter = ('response_type', 'user', 'question__survey')
     search_fields = ('text', 'user__username', 'question__text')
     readonly_fields = ('ip_address', 'user_agent')
@@ -63,8 +61,6 @@ class SurveyAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     prepopulated_fields = {'slug': ('title',)}
     readonly_fields = ('created_at',)
-
-    # Further customizations and methods can be added as needed.
 
 
 # Registering the admin classes with the associated models

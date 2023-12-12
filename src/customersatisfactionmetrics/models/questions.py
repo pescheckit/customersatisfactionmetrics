@@ -34,6 +34,8 @@ class Question(models.Model):
     response_type = models.CharField(max_length=5, choices=RESPONSE_TYPES)
     int_min = models.IntegerField(null=True, blank=True)
     int_max = models.IntegerField(null=True, blank=True)
+    min_label = models.CharField(max_length=255, null=True, blank=True)
+    max_label = models.CharField(max_length=255, null=True, blank=True)
     order = models.IntegerField(default=0)
     is_required = models.BooleanField(default=True)
 

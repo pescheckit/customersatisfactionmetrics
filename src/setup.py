@@ -14,7 +14,7 @@ with open('README.md', 'r', encoding='utf-8') as f:
 
 setup(
     name='customersatisfactionmetrics',
-    version="0.0.5",
+    version="1.0.0",
     author='Bram Mittendorff',
     author_email='bram@pescheck.io',
     description='A short description of your package',
@@ -27,8 +27,16 @@ setup(
         'Django>=3.0',
     ],
     classifiers=[
-        'Development Status :: 3 - Alpha',
-        # Other classifiers...
+        "Development Status :: 1 - Production/Stable",
+        "Natural Language :: English",
+        "Topic :: Utilities",
+        "Environment :: Web Environment",
+        "Intended Audience :: Developers",
+        "License :: MIT License",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 2.7",
+        'Programming Language :: Python :: 3',
+        "Framework :: Django",
     ],
     keywords=[
         'django',
