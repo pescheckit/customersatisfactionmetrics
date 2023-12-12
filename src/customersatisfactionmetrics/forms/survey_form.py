@@ -20,27 +20,28 @@ class SurveyForm(forms.Form):
     """
 
     def __init__(self, *args, **kwargs):
-        survey_id = kwargs.pop('survey_id', None)
-        slug = kwargs.pop('slug', None)
+        self.survey_id = kwargs.pop('survey_id', None)
+        self.slug = kwargs.pop('slug', None)
         super().__init__(*args, **kwargs)  # Updated to Python 3 style super()
+        self.survey = None
 
         # Fetch the survey by ID or slug
-        if survey_id is not None:
-            survey = Survey.objects.get(pk=survey_id)  # pylint: disable=no-member
-        elif slug is not None:
-            survey = Survey.objects.get(slug=slug)  # pylint: disable=no-member
+        if self.survey_id is not None:
+            self.survey = Survey.objects.get(pk=self.survey_id)  # pylint: disable=no-member
+        elif self.slug is not None:
+            self.survey = Survey.objects.get(slug=self.slug)  # pylint: disable=no-member
         else:
             raise ValueError("Either survey_id or slug must be provided")
 
-        for question in survey.questions.order_by('order').all():
+        for question in self.survey.questions.order_by('order').all():
             field_name = f'question_{question.id}'
             field_required = question.is_required
 
-            if survey.survey_type == 'NPS':
+            if self.survey.survey_type == 'NPS':
                 self.fields[field_name] = self.create_generic_choice_field(question)
-            elif survey.survey_type in ['CSAT', 'CES']:
+            elif self.survey.survey_type in ['CSAT', 'CES']:
                 self.fields[field_name] = self.create_generic_choice_field(question)
-            elif survey.survey_type == 'GENERIC':
+            elif self.survey.survey_type == 'GENERIC':
                 if question.response_type == 'INT':
                     if getattr(settings, 'SURVEY_USE_INTEGER_FIELD', True):
                         self.fields[field_name] = forms.IntegerField(
