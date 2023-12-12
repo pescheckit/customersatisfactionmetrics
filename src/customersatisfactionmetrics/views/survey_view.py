@@ -38,26 +38,56 @@ def survey_view(request, survey_id=None, slug=None):
     if request.method == 'POST':
         form = SurveyForm(request.POST, survey_id=survey_id, slug=slug)
         if form.is_valid():
+            session_id = request.session.session_key or generate_unique_session_id(request)
             for key, value in form.cleaned_data.items():
                 if key.startswith('question_'):
                     question_id = int(key.split('_')[1])
                     question = Question.objects.get(pk=question_id)
                     response_type = survey.survey_type
                     client_ip = get_client_ip(request)
-                    response = Response(
-                        user=request.user if request.user.is_authenticated else None,
+
+                    # Check for existing response
+                    existing_response = Response.objects.filter(
                         question=question,
-                        text=value,
-                        response_type=response_type,
-                        ip_address=client_ip,
-                        user_agent=request.META.get('HTTP_USER_AGENT')
-                    )
-                    response.save()
+                        session_id=session_id
+                    ).first()
+
+                    if existing_response:
+                        existing_response.text = value
+                        existing_response.save()
+                    else:
+                        Response.objects.create(
+                            user=request.user if request.user.is_authenticated else None,
+                            question=question,
+                            text=value,
+                            response_type=response_type,
+                            ip_address=client_ip,
+                            user_agent=request.META.get('HTTP_USER_AGENT'),
+                            session_id=session_id
+                        )
             return redirect('thank_you')
     else:
         form = SurveyForm(survey_id=survey_id, slug=slug)
 
     return render(request, 'survey_form.html', {'form': form, 'survey': survey})
+
+
+def generate_unique_session_id(request):
+    """
+    Retrieve or create a unique session ID for the user.
+
+    If the user does not already have a session, this function creates a new session.
+    It ensures that each user, whether authenticated or anonymous, has a unique session ID.
+
+    Args:
+        request: The HttpRequest object from Django.
+
+    Returns:
+        str: A unique session key for the user's session.
+    """
+    if not request.session.exists(request.session.session_key):
+        request.session.create()
+    return request.session.session_key
 
 
 def get_client_ip(request):

@@ -36,6 +36,7 @@ class Response(models.Model):
     text = models.TextField()
     ip_address = models.GenericIPAddressField()
     user_agent = models.TextField()
+    session_id = models.CharField(max_length=128, default='default_session_id')
 
     def __str__(self):
         return str(self.text)  # Ensure that the returned value is a string

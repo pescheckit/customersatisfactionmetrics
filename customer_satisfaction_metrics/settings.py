@@ -123,6 +123,30 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'INFO',  # Set to INFO to see INFO level logs
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',  # Set to INFO to see INFO level logs
+            'propagate': True,
+        },
+        # If you have custom loggers, configure them similarly
+        'customersatisfactionmetrics': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
+
 # Set to False to disable the survey by ID URL, keep in mind when enabling you can enumerate the survey urls
 SURVEY_ENABLE_ID_URL = False
 
