@@ -74,9 +74,7 @@ def survey_view(request, survey_id=None, slug=None):
                     'survey': survey,
                     'thank_you': True  # Flag to indicate a successful submission
                 })
-            else:
-                # Redirect to a thank you page
-                return redirect('thank_you')
+            return redirect('thank_you')
     else:
         form = SurveyForm(survey_id=survey_id, slug=slug)
 
