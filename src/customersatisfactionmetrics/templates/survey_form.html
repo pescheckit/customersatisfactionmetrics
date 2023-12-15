@@ -9,19 +9,24 @@
 <body>
     <h1>{{ survey.title }}</h1>
 
-    <form method="post">
-        {% csrf_token %}
-        {% for field in form %}
-            <div>
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {% if not field.field.required %}<span>(Optional)</span>{% endif %}
-                {{ field }}
-                {% if field.errors %}
-                    <div class="error">{{ field.errors }}</div>
-                {% endif %}
-            </div>
-        {% endfor %}
-        <button type="submit">{% trans 'Submit' %}</button>
-    </form>
+
+    {% if thank_you %}
+        <p>Thank you for completing the survey!</p>
+    {% else %}
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div>
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {% if not field.field.required %}<span>(Optional)</span>{% endif %}
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="error">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit">{% trans 'Submit' %}</button>
+        </form>
+    {% endif %}
 </body>
 </html>

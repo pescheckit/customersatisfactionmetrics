@@ -7,6 +7,7 @@ for extracting client IP information from requests.
 
 from django.http import Http404
 from django.shortcuts import redirect, render
+from django.conf import settings
 
 from customersatisfactionmetrics.forms.survey_form import SurveyForm
 from customersatisfactionmetrics.models import Question, Response, Survey
@@ -65,7 +66,17 @@ def survey_view(request, survey_id=None, slug=None):
                             user_agent=request.META.get('HTTP_USER_AGENT'),
                             session_id=session_id
                         )
-            return redirect('thank_you')
+            # Check if SURVEY_SELF_POST is enabled
+            if settings.SURVEY_SELF_POST:
+                # Display a thank you message on the same page
+                return render(request, 'survey_form.html', {
+                    'form': form,
+                    'survey': survey,
+                    'thank_you': True  # Flag to indicate a successful submission
+                })
+            else:
+                # Redirect to a thank you page
+                return redirect('thank_you')
     else:
         form = SurveyForm(survey_id=survey_id, slug=slug)
 

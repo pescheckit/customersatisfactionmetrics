@@ -11,3 +11,6 @@ SURVEY_ENABLE_ID_URL = False
 
 # Set to True to use integer fields instead of other field types
 SURVEY_USE_INTEGER_FIELD = False
+
+# Add this line to your existing settings
+SURVEY_SELF_POST = True
