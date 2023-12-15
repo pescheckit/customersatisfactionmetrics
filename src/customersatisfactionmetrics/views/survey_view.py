@@ -5,9 +5,9 @@ This module includes views to display and process survey forms, as well as utili
 for extracting client IP information from requests.
 """
 
+from django.conf import settings
 from django.http import Http404
 from django.shortcuts import redirect, render
-from django.conf import settings
 
 from customersatisfactionmetrics.forms.survey_form import SurveyForm
 from customersatisfactionmetrics.models import Question, Response, Survey
