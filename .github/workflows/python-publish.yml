@@ -11,6 +11,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: release
+    needs: [build, lint] # Specify dependencies on other jobs
 
     steps:
     - uses: actions/checkout@v3
