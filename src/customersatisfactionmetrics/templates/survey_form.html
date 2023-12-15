@@ -10,7 +10,7 @@
     <h1>{{ survey.title }}</h1>
 
 
-    {% if thank_you %}
+    {% if form_submitted %}
         <p>Thank you for completing the survey!</p>
     {% else %}
         <form method="post">

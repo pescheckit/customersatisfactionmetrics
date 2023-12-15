@@ -28,7 +28,6 @@ def survey_view(request, survey_id=None, slug=None):
     Returns:
         HttpResponse: The rendered survey form or a redirect to a thank you page.
     """
-    # Fetch the survey by ID or slug
     if survey_id:
         survey = Survey.objects.get(pk=survey_id)
     elif slug:
@@ -36,49 +35,60 @@ def survey_view(request, survey_id=None, slug=None):
     else:
         raise Http404("Survey not found")
 
+    form_submitted = False
     if request.method == 'POST':
         form = SurveyForm(request.POST, survey_id=survey_id, slug=slug)
         if form.is_valid():
-            session_id = request.session.session_key or generate_unique_session_id(request)
-            for key, value in form.cleaned_data.items():
-                if key.startswith('question_'):
-                    question_id = int(key.split('_')[1])
-                    question = Question.objects.get(pk=question_id)
-                    response_type = survey.survey_type
-                    client_ip = get_client_ip(request)
-
-                    # Check for existing response
-                    existing_response = Response.objects.filter(
-                        question=question,
-                        session_id=session_id
-                    ).first()
-
-                    if existing_response:
-                        existing_response.text = value
-                        existing_response.save()
-                    else:
-                        Response.objects.create(
-                            user=request.user if request.user.is_authenticated else None,
-                            question=question,
-                            text=value,
-                            response_type=response_type,
-                            ip_address=client_ip,
-                            user_agent=request.META.get('HTTP_USER_AGENT'),
-                            session_id=session_id
-                        )
-            # Check if SURVEY_SELF_POST is enabled
-            if settings.SURVEY_SELF_POST:
-                # Display a thank you message on the same page
-                return render(request, 'survey_form.html', {
-                    'form': form,
-                    'survey': survey,
-                    'thank_you': True  # Flag to indicate a successful submission
-                })
-            return redirect('thank_you')
+            if getattr(settings, 'SURVEY_SELF_POST', False):
+                process_form_submission(request, form, survey)
+                form_submitted = True
+            else:
+                return redirect('thank_you')
     else:
         form = SurveyForm(survey_id=survey_id, slug=slug)
 
-    return render(request, 'survey_form.html', {'form': form, 'survey': survey})
+    return render(request, 'survey_form.html', {
+        'form': form,
+        'survey': survey,
+        'form_submitted': form_submitted
+    })
+
+
+def process_form_submission(request, form, survey):
+    """
+    Processes the form submission for a survey.
+
+    Args:
+        request: The HttpRequest object.
+        form: The submitted SurveyForm.
+        survey: The Survey instance related to the form.
+    """
+    session_id = request.session.session_key or generate_unique_session_id(request)
+    for key, value in form.cleaned_data.items():
+        if key.startswith('question_'):
+            question_id = int(key.split('_')[1])
+            question = Question.objects.get(pk=question_id)
+            response_type = survey.survey_type
+            client_ip = get_client_ip(request)
+
+            existing_response = Response.objects.filter(
+                question=question,
+                session_id=session_id
+            ).first()
+
+            if existing_response:
+                existing_response.text = value
+                existing_response.save()
+            else:
+                Response.objects.create(
+                    user=request.user if request.user.is_authenticated else None,
+                    question=question,
+                    text=value,
+                    response_type=response_type,
+                    ip_address=client_ip,
+                    user_agent=request.META.get('HTTP_USER_AGENT'),
+                    session_id=session_id
+                )
 
 
 def generate_unique_session_id(request):
