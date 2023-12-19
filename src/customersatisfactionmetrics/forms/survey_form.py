@@ -4,14 +4,13 @@ Module for defining forms related to Surveys in the Customer Satisfaction Metric
 This module contains form definitions that are used for creating and handling surveys,
 including dynamically generating form fields based on the survey type and question response type.
 """
-
 from django import forms
 from django.conf import settings
 
-from customersatisfactionmetrics.models import Survey
+from customersatisfactionmetrics.models import Survey, Response
 
 
-class SurveyForm(forms.Form):
+class SurveyForm(forms.ModelForm):
     """
     Form for a Survey.
 
@@ -22,8 +21,10 @@ class SurveyForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.survey_id = kwargs.pop('survey_id', None)
         self.slug = kwargs.pop('slug', None)
-        super().__init__(*args, **kwargs)  # Updated to Python 3 style super()
+        self.session_id = kwargs.pop('session_id', None)        
         self.survey = None
+
+        super().__init__(*args, **kwargs)  # Updated to Python 3 style super()
 
         # Fetch the survey by ID or slug
         if self.survey_id is not None:
@@ -60,6 +61,40 @@ class SurveyForm(forms.Form):
                     )
                 elif question.response_type == 'BOOL':
                     self.fields[field_name] = forms.BooleanField(label=question.text, required=False)
+
+            response = Response.objects.filter(question=question, session_id=self.session_id).first()
+            if response:
+                self.fields[field_name].initial = response.text
+
+    def save(self, commit=True, **kwargs):
+        """
+        Save method for handling survey form data.
+
+        This method handles the saving of survey form data. If a response exists for a question
+        and session ID, it updates the response; otherwise, it creates a new response.
+
+        Args:
+            commit (bool): Whether to commit the changes immediately.
+            **kwargs: Additional keyword arguments for saving data.
+        """
+        response = Response.objects.filter(
+            question = kwargs.get('question'),
+            session_id = kwargs.get('session_id'),
+        )
+
+        if response.exists():
+            response.update(**kwargs)
+        else:
+            Response.objects.create(**kwargs)
+
+    class Meta:
+        """
+        Meta class for SurveyForm.
+
+        Defines metadata for the SurveyForm class, including the model and fields.
+        """
+        model = Survey
+        fields = []
 
     def create_generic_choice_field(self, question):
         """
