@@ -14,7 +14,7 @@ with open('README.md', 'r', encoding='utf-8') as f:
 
 setup(
     name='customersatisfactionmetrics',
-    version="1.0.3",
+    version="1.0.5",
     author='Bram Mittendorff',
     author_email='bram@pescheck.io',
     description='A short description of your package',
