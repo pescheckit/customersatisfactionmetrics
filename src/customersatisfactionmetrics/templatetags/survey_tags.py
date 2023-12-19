@@ -44,7 +44,7 @@ def insert_survey_by_slug(slug):
     Template tag for inserting a survey form by its slug.
 
     Retrieves a survey by its slug and generates a corresponding SurveyForm.
-    
+
     Args:
         slug (str): The slug of the survey to be retrieved and displayed.
 

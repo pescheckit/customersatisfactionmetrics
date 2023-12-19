@@ -10,7 +10,7 @@ from django.http import Http404
 from django.shortcuts import redirect, render
 
 from customersatisfactionmetrics.forms.survey_form import SurveyForm
-from customersatisfactionmetrics.models import Question, Response, Survey
+from customersatisfactionmetrics.models import Question, Survey
 
 
 def survey_view(request, survey_id=None, slug=None):
@@ -37,7 +37,12 @@ def survey_view(request, survey_id=None, slug=None):
 
     form_submitted = False
     if request.method == 'POST':
-        form = SurveyForm(request.POST, survey_id=survey_id, slug=slug)
+        form = SurveyForm(
+            request.POST,
+            survey_id=survey_id,
+            slug=slug,
+            session_id=generate_unique_session_id(request)
+        )
         if form.is_valid():
             if getattr(settings, 'SURVEY_SELF_POST', False):
                 process_form_submission(request, form, survey)
@@ -45,7 +50,11 @@ def survey_view(request, survey_id=None, slug=None):
             else:
                 return redirect('thank_you')
     else:
-        form = SurveyForm(survey_id=survey_id, slug=slug)
+        form = SurveyForm(
+            survey_id=survey_id,
+            slug=slug,
+            session_id=generate_unique_session_id(request)
+        )
 
     return render(request, 'survey_form.html', {
         'form': form,
@@ -63,32 +72,42 @@ def process_form_submission(request, form, survey):
         form: The submitted SurveyForm.
         survey: The Survey instance related to the form.
     """
-    session_id = request.session.session_key or generate_unique_session_id(request)
     for key, value in form.cleaned_data.items():
         if key.startswith('question_'):
-            question_id = int(key.split('_')[1])
-            question = Question.objects.get(pk=question_id)
-            response_type = survey.survey_type
-            client_ip = get_client_ip(request)
+            form.save(**get_form_kwargs(request, key, value, survey))
 
-            existing_response = Response.objects.filter(
-                question=question,
-                session_id=session_id
-            ).first()
 
-            if existing_response:
-                existing_response.text = value
-                existing_response.save()
-            else:
-                Response.objects.create(
-                    user=request.user if request.user.is_authenticated else None,
-                    question=question,
-                    text=value,
-                    response_type=response_type,
-                    ip_address=client_ip,
-                    user_agent=request.META.get('HTTP_USER_AGENT'),
-                    session_id=session_id
-                )
+def get_form_kwargs(request, key, value, survey):
+    """
+    Construct and return keyword arguments for saving form data.
+
+    This function generates and organizes keyword arguments required for saving
+    survey form data, including user, question, text response, response type,
+    IP address, user agent, and session ID.
+
+    Args:
+        request: The HttpRequest object.
+        key (str): The key associated with the question in the form data.
+        value: The submitted value for the question.
+        survey: The Survey instance related to the form.
+
+    Returns:
+        dict: A dictionary containing keyword arguments for saving form data.
+    """
+    session_id = request.session.session_key or generate_unique_session_id(request)
+    question_id = int(key.split('_')[1])
+    question = Question.objects.get(pk=question_id)
+    response_type = survey.survey_type
+    client_ip = get_client_ip(request)
+    return {
+        'user': request.user,
+        'question': question,
+        'text': value,
+        'response_type': response_type,
+        'ip_address': client_ip,
+        'user_agent': request.META.get('HTTP_USER_AGENT'),
+        'session_id': session_id
+    }
 
 
 def generate_unique_session_id(request):
