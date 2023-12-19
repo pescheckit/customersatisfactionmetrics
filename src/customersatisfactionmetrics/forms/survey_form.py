@@ -1,3 +1,9 @@
+"""
+Module for defining forms related to Surveys in the Customer Satisfaction Metrics application.
+
+This module contains form definitions that are used for creating and handling surveys,
+including dynamically generating form fields based on the survey type and question response type.
+"""
 from django import forms
 from django.conf import settings
 from customersatisfactionmetrics.models import Response, Survey
