@@ -6,6 +6,7 @@ for extracting client IP information from requests.
 """
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.http import Http404
 from django.shortcuts import redirect, render
 
@@ -99,8 +100,13 @@ def get_form_kwargs(request, key, value, survey):
     question = Question.objects.get(pk=question_id)
     response_type = survey.survey_type
     client_ip = get_client_ip(request)
+
+    user = None
+    if isinstance(request.user, get_user_model()):
+        user = request.user
+
     return {
-        'user': request.user,
+        'user': user,
         'question': question,
         'text': value,
         'response_type': response_type,
