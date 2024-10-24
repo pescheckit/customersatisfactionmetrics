@@ -16,7 +16,7 @@ class QuestionAdmin(admin.ModelAdmin):
     Includes configurations for display and editing in the Django admin site.
     """
 
-    list_display = ('text', 'survey', 'order', 'response_type', 'is_required', 'min_label', 'max_label')
+    list_display = ('text', 'language', 'survey', 'order', 'response_type', 'is_required', 'min_label', 'max_label')
     list_editable = ('order', 'is_required')
     ordering = ('survey', 'order')
     search_fields = ['text']

@@ -5,6 +5,7 @@ It includes the Question class with fields and methods to represent survey quest
 along with their types, ordering, and whether they are required.
 """
 
+from django.conf import settings
 from django.db import models
 
 from .surveys import Survey
@@ -38,6 +39,7 @@ class Question(models.Model):
     max_label = models.CharField(max_length=255, null=True, blank=True)
     order = models.IntegerField(default=0)
     is_required = models.BooleanField(default=True)
+    language = models.CharField(max_length=255, choices=settings.LANGUAGES, default="en")
 
     class Meta:
         """
