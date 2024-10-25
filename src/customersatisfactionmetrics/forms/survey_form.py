@@ -7,6 +7,7 @@ including dynamically generating form fields based on the survey type and questi
 from django import forms
 from django.conf import settings
 from django.utils.translation import get_language
+
 from customersatisfactionmetrics.models import Response, Survey
 
 
