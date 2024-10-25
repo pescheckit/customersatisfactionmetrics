@@ -6,7 +6,7 @@ including dynamically generating form fields based on the survey type and questi
 """
 from django import forms
 from django.conf import settings
-
+from django.utils.translation import get_language
 from customersatisfactionmetrics.models import Response, Survey
 
 
@@ -62,9 +62,15 @@ class SurveyForm(forms.ModelForm):
 
     def construct_survey_fields(self):
         """
-        Construct survey fields based on the survey type and question response types.
+        Construct survey fields based on the survey type, language and question response types.
         """
-        for question in self.survey.questions.order_by('order').all():
+        questions = self.survey.questions.order_by('order').filter(language=get_language())
+        if not questions:
+            questions = self.survey.questions.order_by('order').filter(language="en")
+        if not questions:
+            raise ValueError(f"No questions found for the survey: {self.survey}")
+
+        for question in questions:
             field_name = f'question_{question.id}'
             field_required = question.is_required
 
