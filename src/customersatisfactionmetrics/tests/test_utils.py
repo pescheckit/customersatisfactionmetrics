@@ -10,7 +10,7 @@ import logging
 from django.template import Context, Template
 from django.test import TestCase
 
-from customersatisfactionmetrics.models import Survey, Question
+from customersatisfactionmetrics.models import Question, Survey
 
 # Configure logging
 logger = logging.getLogger(__name__)
