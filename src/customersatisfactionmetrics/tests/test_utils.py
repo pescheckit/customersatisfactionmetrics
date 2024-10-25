@@ -10,7 +10,7 @@ import logging
 from django.template import Context, Template
 from django.test import TestCase
 
-from customersatisfactionmetrics.models import Survey
+from customersatisfactionmetrics.models import Survey, Question
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -29,6 +29,7 @@ class TemplateTagsTests(TestCase):
         Set up function to create a survey instance for testing the template tags.
         """
         self.survey = Survey.objects.create(title="Customer Feedback", survey_type="CSAT", slug="customer-feedback")
+        self.question = Question.objects.create(survey=self.survey, text="How satisfied are you?", response_type="INT")
         logger.info("TemplateTagsTests setUp completed.")
 
     def test_insert_survey_by_id_tag(self):
