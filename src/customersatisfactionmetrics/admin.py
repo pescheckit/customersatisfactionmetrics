@@ -30,10 +30,19 @@ class ResponseAdmin(admin.ModelAdmin):
     and filtering options.
     """
 
-    list_display = ('question', 'user', 'response_type', 'shortened_text', 'ip_address', 'user_agent', 'session_id')
-    list_filter = ('response_type', 'user', 'question__survey')
+    list_display = (
+        'created_at',
+        'question',
+        'user',
+        'response_type',
+        'shortened_text',
+        'ip_address',
+        'user_agent',
+        'session_id'
+    )
+    list_filter = ('response_type', 'user', 'question__survey', 'created_at')
     search_fields = ('text', 'user__username', 'question__text')
-    readonly_fields = ('ip_address', 'user_agent')
+    readonly_fields = ('ip_address', 'user_agent', 'created_at', 'updated_at')
 
     def shortened_text(self, obj):
         """
@@ -56,11 +65,11 @@ class SurveyAdmin(admin.ModelAdmin):
     in the admin interface.
     """
 
-    list_display = ('title', 'survey_type', 'created_at', 'slug')
+    list_display = ('title', 'survey_type', 'created_at', 'updated_at', 'slug')
     list_filter = ('survey_type', 'created_at')
     search_fields = ('title',)
     prepopulated_fields = {'slug': ('title',)}
-    readonly_fields = ('created_at',)
+    readonly_fields = ('created_at', 'updated_at')
 
 
 # Registering the admin classes with the associated models
