@@ -31,6 +31,7 @@ class Survey(models.Model):
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     survey_type = models.CharField(max_length=200, choices=SURVEY_TYPES)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
