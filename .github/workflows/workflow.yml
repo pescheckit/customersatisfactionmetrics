@@ -85,8 +85,7 @@ jobs:
       - name: Build package
         run: pipenv run python -m build src/
       - name: Publish package
-        uses: pypa/gh-action-pypi-publish@v1.8.10
+        uses: pypa/gh-action-pypi-publish@v1.14.2
         with:
-          user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
-          packages_dir: src/dist/
+          packages-dir: src/dist/

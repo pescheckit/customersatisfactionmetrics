@@ -6,18 +6,22 @@ This script is used to handle the packaging and distribution of the
 and other necessary package information.
 """
 
+from pathlib import Path
+
 from setuptools import find_packages, setup
 
-# Using 'with' statement for safe file handling
-with open('README.md', 'r', encoding='utf-8') as f:
-    long_description = f.read()
+# Resolve the README relative to this file rather than the working directory.
+# Tools that build the package from somewhere else (editable installs, GitHub's
+# dependency submission) otherwise fail here before they can read the metadata.
+README = Path(__file__).resolve().parent / 'README.md'
+long_description = README.read_text(encoding='utf-8') if README.is_file() else ''
 
 setup(
     name='customersatisfactionmetrics',
     version="1.1.0",
     author='Bram Mittendorff',
     author_email='bram@pescheck.io',
-    description='A short description of your package',
+    description='Django app for in-product surveys: CSAT, NPS and CES with touchpoints and impression tracking',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='http://github.com/pescheckit/customersatisfactionmetrics',
