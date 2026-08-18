@@ -8,10 +8,11 @@ survey questions, including the type of response and associated user details.
 from django.conf import settings
 from django.db import models
 
+from .mixins import SubjectMixin
 from .questions import Question
 
 
-class Response(models.Model):
+class Response(SubjectMixin, models.Model):
     """
     Represents a user's response to a survey question.
 
@@ -22,6 +23,8 @@ class Response(models.Model):
         text (TextField): The text content of the response.
         ip_address (GenericIPAddressField): The IP address of the user at the time of response.
         user_agent (TextField): The user agent of the user's device for the response.
+        content_object (GenericForeignKey): Optional link to whatever the response
+            was about, for example the order or the application being rated.
     """
 
     RESPONSE_TYPES = (

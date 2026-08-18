@@ -13,11 +13,11 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install Pipenv
@@ -30,9 +30,6 @@ jobs:
       - name: Analysing the code with pylint
         run: |
           pipenv run pylint $(git ls-files '*.py')
-      - name: Check code style with flake8
-        run: |
-          pipenv run flake8 .
       - name: Check import order with isort
         run: |
           pipenv run isort --check-only --diff .
@@ -46,11 +43,11 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install Pipenv and Dependencies
@@ -73,11 +70,11 @@ jobs:
     if: github.event_name == 'release' && github.event.action == 'published'
     environment: release
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v7
         with:
           python-version: '3.x'
       - name: Install Pipenv

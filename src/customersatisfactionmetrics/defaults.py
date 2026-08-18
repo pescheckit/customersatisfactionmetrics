@@ -14,3 +14,13 @@ SURVEY_USE_INTEGER_FIELD = False
 
 # Add this line to your existing settings
 SURVEY_SELF_POST = True
+
+# Dotted path to a callable taking the request and returning a string used to group
+# respondents for scope level cooldowns, for example an organisation or tenant id.
+# Leave as None when no grouping is needed.
+SURVEY_SCOPE_RESOLVER = None
+
+# How long an unanswered touchpoint stays reusable, in hours. Within this window a
+# page reload shows the same card again instead of it vanishing, and records no
+# second impression. After it, the impression counts as ignored.
+SURVEY_OPEN_IMPRESSION_TTL_HOURS = 24

@@ -11,7 +11,7 @@ from django.http import Http404
 from django.shortcuts import redirect, render
 
 from customersatisfactionmetrics.forms.survey_form import SurveyForm
-from customersatisfactionmetrics.models import Question, Survey
+from customersatisfactionmetrics.models import Question, Survey, subject_fields
 
 
 def survey_view(request, survey_id=None, slug=None):
@@ -64,7 +64,7 @@ def survey_view(request, survey_id=None, slug=None):
     })
 
 
-def process_form_submission(request, form, survey):
+def process_form_submission(request, form, survey, subject=None):
     """
     Processes the form submission for a survey.
 
@@ -72,13 +72,16 @@ def process_form_submission(request, form, survey):
         request: The HttpRequest object.
         form: The submitted SurveyForm.
         survey: The Survey instance related to the form.
+        subject (Model, optional): What the answers are about, for example the
+            order or application being rated. Stored on every response, which is
+            what makes anonymous feedback traceable back to its context.
     """
     for key, value in form.cleaned_data.items():
         if key.startswith('question_'):
-            form.save(**get_form_kwargs(request, key, value, survey))
+            form.save(**get_form_kwargs(request, key, value, survey, subject=subject))
 
 
-def get_form_kwargs(request, key, value, survey):
+def get_form_kwargs(request, key, value, survey, subject=None):
     """
     Construct and return keyword arguments for saving form data.
 
@@ -91,6 +94,7 @@ def get_form_kwargs(request, key, value, survey):
         key (str): The key associated with the question in the form data.
         value: The submitted value for the question.
         survey: The Survey instance related to the form.
+        subject (Model, optional): What the answer is about.
 
     Returns:
         dict: A dictionary containing keyword arguments for saving form data.
@@ -111,8 +115,11 @@ def get_form_kwargs(request, key, value, survey):
         'text': value,
         'response_type': response_type,
         'ip_address': client_ip,
-        'user_agent': request.META.get('HTTP_USER_AGENT'),
-        'session_id': session_id
+        # Both columns are NOT NULL, and a client is free to send neither header,
+        # so fall back to an empty string rather than failing the submission.
+        'user_agent': request.META.get('HTTP_USER_AGENT') or '',
+        'session_id': session_id,
+        **subject_fields(subject),
     }
 
 

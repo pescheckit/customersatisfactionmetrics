@@ -115,11 +115,144 @@ Example:
 This method provides a flexible way to integrate surveys into various parts of your Django application without the need for additional view logic or URL configurations.
 
 
+### 3. Touchpoints: asking only sometimes
+
+`insert_survey_by_slug` renders a survey every single time the template is
+rendered. A **touchpoint** wraps a survey in rules about *when* it may be shown,
+so you can leave the tag in a shared template and trust that visitors are not
+asked repeatedly.
+
+Create a `Touchpoint` in the admin, point it at a survey, then render it:
+
+```html
+{% load survey_tags %}
+{% survey_touchpoint 'order-placed' %}
+```
+
+This renders nothing at all when the touchpoint does not exist, is inactive, or
+the visitor is inside a cooldown, so it is safe to place on any page. Rendering
+it records an `Impression`, which is what the cooldown is measured against and
+what lets you compute a real response rate later.
+
+The tag needs `django.template.context_processors.request` enabled.
+
+#### Cooldowns
+
+Each touchpoint carries its own rules:
+
+| Field | Meaning |
+| --- | --- |
+| `cooldown_days` | How long a respondent is left alone after being shown a survey. Defaults to 84 days (12 weeks). |
+| `cooldown_scope` | `GLOBAL` means being shown *any* touchpoint starts the cooldown for all of them; `TOUCHPOINT` confines it to this one. Defaults to `GLOBAL`. |
+| `scope_cooldown_days` | An optional second cooldown applied to a shared scope key, so a whole team or tenant is not surveyed in the same week. `0` disables it. |
+| `is_active` | Pause a touchpoint without touching code. |
+
+An impression that is neither answered nor dismissed stays reusable for
+`SURVEY_OPEN_IMPRESSION_TTL_HOURS` (24 by default). Within that window a page
+reload shows the same card again rather than it silently vanishing, and no
+second impression is recorded. After it, the impression counts as ignored.
+
+#### Scope keys
+
+A scope key is an opaque string that groups respondents, typically an
+organisation or tenant id. Pass it explicitly:
+
+```html
+{% survey_touchpoint 'order-placed' scope_key=organisation.scope_key %}
+```
+
+Or configure a resolver once and let the package call it:
+
+```python
+# settings.py
+SURVEY_SCOPE_RESOLVER = "myapp.utils.current_organisation_key"
+```
+
+```python
+# myapp/utils.py
+def current_organisation_key(request):
+    organisation = getattr(request, "organisation", None)
+    return f"org:{organisation.id}" if organisation else ""
+```
+
+The package never imports your models; it only ever sees the string you return.
+
+#### Measuring
+
+Because impressions are recorded separately from responses, you can distinguish
+"never asked" from "asked and ignored":
+
+```python
+from customersatisfactionmetrics.models import Impression
+
+shown = Impression.objects.filter(touchpoint__slug="order-placed")
+response_rate = shown.filter(responded_at__isnull=False).count() / shown.count()
+```
+
+#### Linking feedback to an object
+
+Knowing *who* answered is often not enough, and sometimes impossible: a visitor
+filling in a public form has no user account at all. Every `Response` and
+`Impression` can therefore point at any object in your application through a
+generic relation, so an answer stays traceable to the thing it was about.
+
+Pass it to the tag:
+
+```html
+{% survey_touchpoint 'order-placed' subject=order %}
+```
+
+The subject is stored on the impression and the answers **inherit it on
+submission**, read back from the impression rather than posted with the form, so
+a respondent cannot relabel their feedback as being about somebody else's
+object.
+
+For a survey rendered outside a touchpoint, pass it when processing the form:
+
+```python
+from customersatisfactionmetrics.views.survey_view import process_form_submission
+
+process_form_submission(request, form, survey, subject=order)
+```
+
+Then query it back:
+
+```python
+from customersatisfactionmetrics.models import Response, subject_filter
+
+Response.objects.filter(**subject_filter(order))
+```
+
+Primary keys are stored as text, so integer, UUID and slug primary keys all
+work. The subject is optional, and deleting the object it points at leaves the
+answer readable: the recorded `content_type` and `object_id` survive.
+
+This requires `django.contrib.contenttypes` in `INSTALLED_APPS`, which Django
+enables by default.
+
+
+#### Ratings with a comment
+
+A scored survey (`CSAT`, `NPS`, `CES`) fixes the bounds of its `INT` questions
+(1-5, or 0-10 for NPS) but leaves `TEXT` and `BOOL` questions alone. That is what
+lets a short survey pair a rating with an optional comment, which is the usual
+shape of an in-product survey: one required score, one optional free text.
+
+Marking the comment optional matters. Requiring free text is the single most
+common reason in-product surveys collect almost nothing.
+
+
 ## Features
 
 - Supports various survey types: CSAT, NPS, CES, and Generic.
 - Allows both anonymous and logged-in user responses.
 - Tracks user metadata like IP address and user agent.
+- Touchpoints with per respondent and per scope cooldowns, so surveys are shown
+  only sometimes rather than on every page render.
+- Impression tracking, which distinguishes "never asked" from "asked and
+  ignored" and makes a real response rate computable.
+- Generic subject links, so a response can be tied to any object in your
+  application even when the respondent is anonymous.
 
 ## Contributing
 

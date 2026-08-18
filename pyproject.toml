@@ -1,5 +1,19 @@
-[tool.flake8]
-max-line-length = 120
-
 [tool.isort]
+# Match ruff's isort, which only emits the vertical hanging indent style,
+# so the two linters cannot disagree about how to wrap a long import.
+profile = "black"
 line_length = 120
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+# flake8 was dropped in favour of ruff, so pull in the checks it was providing.
+# E501 (line length) and the W warnings are not in ruff's default rule set.
+extend-select = ["E501", "W"]
+
+# W293 was ignored under flake8; keep it that way.
+# Django declares mutable class attributes by design: Meta options, admin
+# list_display, migration operations and dependencies. Annotating them as
+# ClassVar is not applicable, so RUF012 is noise in a Django codebase.
+ignore = ["RUF012", "W293"]

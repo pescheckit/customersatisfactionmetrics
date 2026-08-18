@@ -7,7 +7,7 @@ handled in the Django admin site, including list views, filters, and search capa
 """
 from django.contrib import admin
 
-from .models import Question, Response, Survey
+from .models import Impression, Question, Response, Survey, Touchpoint
 
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -76,3 +76,54 @@ class SurveyAdmin(admin.ModelAdmin):
 admin.site.register(Survey, SurveyAdmin)
 admin.site.register(Response, ResponseAdmin)
 admin.site.register(Question, QuestionAdmin)
+
+
+class TouchpointAdmin(admin.ModelAdmin):
+    """
+    Administration interface for the Touchpoint model.
+    Lets an editor add, retarget or pause a touchpoint without a code change.
+    """
+
+    list_display = ('slug', 'title', 'survey', 'is_active', 'cooldown_days', 'cooldown_scope', 'scope_cooldown_days')
+    list_editable = ('is_active', 'cooldown_days', 'cooldown_scope', 'scope_cooldown_days')
+    list_filter = ('is_active', 'cooldown_scope', 'survey')
+    search_fields = ('slug', 'title', 'description')
+    prepopulated_fields = {'slug': ('title',)}
+    readonly_fields = ('created_at', 'updated_at')
+
+
+class ImpressionAdmin(admin.ModelAdmin):
+    """
+    Administration interface for the Impression model.
+    Read only, because impressions are evidence of what was shown to whom and
+    editing them would corrupt both the cooldown and the response rate.
+    """
+
+    list_display = ('shown_at', 'touchpoint', 'user', 'scope_key', 'outcome')
+    list_filter = ('touchpoint', 'shown_at')
+    search_fields = ('scope_key', 'session_id', 'user__username')
+    readonly_fields = ('touchpoint', 'user', 'session_id', 'scope_key', 'shown_at', 'dismissed_at', 'responded_at')
+
+    def outcome(self, obj):
+        """
+        Summarise what the respondent did with this impression.
+
+        Args:
+            obj (Impression): The Impression object.
+
+        Returns:
+            str: One of "responded", "dismissed" or "open".
+        """
+        if obj.responded_at:
+            return 'responded'
+        if obj.dismissed_at:
+            return 'dismissed'
+        return 'open'
+    outcome.short_description = 'Outcome'
+
+    def has_add_permission(self, request):
+        return False
+
+
+admin.site.register(Touchpoint, TouchpointAdmin)
+admin.site.register(Impression, ImpressionAdmin)

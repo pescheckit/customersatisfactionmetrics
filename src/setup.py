@@ -14,7 +14,7 @@ with open('README.md', 'r', encoding='utf-8') as f:
 
 setup(
     name='customersatisfactionmetrics',
-    version="1.0.9",
+    version="1.1.0",
     author='Bram Mittendorff',
     author_email='bram@pescheck.io',
     description='A short description of your package',
@@ -35,9 +35,12 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Framework :: Django",
     ],
     keywords=[

@@ -48,11 +48,14 @@ class Question(models.Model):
         ordering = ['order']
 
     def save(self, *args, **kwargs):
-        if self.survey.survey_type in ['CSAT', 'NPS', 'CES']:
-            self.response_type = 'INT'
+        # The survey type fixes the bounds of the *rating* question, it does not
+        # make every question a rating. Leaving TEXT and BOOL questions alone is
+        # what allows a scored survey to carry an optional comment alongside its
+        # score, which is the usual shape of a short in-product survey.
+        if self.response_type == 'INT' and self.survey.survey_type in ['CSAT', 'NPS', 'CES']:
             if self.survey.survey_type == 'NPS':
                 self.int_min, self.int_max = 0, 10
-            elif self.survey.survey_type in ['CSAT', 'CES']:
+            else:
                 self.int_min, self.int_max = 1, 5
         super().save(*args, **kwargs)
 
