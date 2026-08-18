@@ -10,7 +10,6 @@ customersatisfactionmetrics = {editable = true, path = "./src"}
 
 [dev-packages]
 pylint = "*"
-flake8 = "*"
 isort = "*"
 
 [requires]

@@ -15,14 +15,7 @@ from django.template import Context, Template
 from django.test import RequestFactory, TestCase
 from django.utils import timezone
 
-from customersatisfactionmetrics.models import (
-    Impression,
-    Question,
-    Response,
-    Survey,
-    Touchpoint,
-    subject_filter,
-)
+from customersatisfactionmetrics.models import Impression, Question, Response, Survey, Touchpoint, subject_filter
 from customersatisfactionmetrics.touchpoints import (
     is_eligible,
     mark_dismissed,
