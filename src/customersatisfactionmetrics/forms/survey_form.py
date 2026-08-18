@@ -48,6 +48,7 @@ class SurveyForm(forms.ModelForm):
         self.slug = kwargs.pop('slug', None)
         self.session_id = kwargs.pop('session_id', None)
         self.survey = None
+        self.questions = []
 
         super().__init__(*args, **kwargs)  # Updated to Python 3 style super()
 
@@ -63,7 +64,13 @@ class SurveyForm(forms.ModelForm):
 
     def construct_survey_fields(self):
         """
-        Construct survey fields based on the survey type, language and question response types.
+        Construct survey fields based on the question response types.
+
+        The survey type decides how a numeric question is drawn: scaled surveys
+        (NPS, CSAT, CES) render it as a labelled choice, so it can be presented
+        as stars or a scale, while GENERIC surveys may use a plain number input.
+        Every survey type may mix in TEXT and BOOL questions, which is what
+        allows a rating to be paired with an optional comment.
         """
         questions = self.survey.questions.order_by('order').filter(language=get_language())
         if not questions:
@@ -71,13 +78,15 @@ class SurveyForm(forms.ModelForm):
         if not questions:
             raise ValueError(f"No questions found for the survey: {self.survey}")
 
-        for question in questions:
+        self.questions = list(questions)
+
+        for question in self.questions:
             field_name = f'question_{question.id}'
             field_required = question.is_required
 
-            if self.survey.survey_type in ['NPS', 'CSAT', 'CES']:
+            if question.response_type == 'INT' and self.survey.survey_type in ['NPS', 'CSAT', 'CES']:
                 self.fields[field_name] = create_generic_choice_field(question)
-            elif self.survey.survey_type == 'GENERIC':
+            else:
                 self.handle_generic_question(question, field_name, field_required)
 
             response = Response.objects.filter(question=question, session_id=self.session_id).first()

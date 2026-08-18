@@ -48,6 +48,9 @@ To start the project using Docker Compose, follow these steps:
 
 - **Diverse Survey Types**: Support for various survey types including CSAT, NPS, CES, and Generic Surveys.
 - **User Response Tracking**: Capability to handle both anonymous and logged-in user responses, along with user metadata like IP address and user agent.
+- **Touchpoints**: Attach a survey to a moment in your own application and let the package decide when it may be shown, using per respondent and per scope cooldowns.
+- **Impression Tracking**: Records what was shown to whom, so "never asked" and "asked and ignored" are distinguishable and response rates are computable.
+- **Subject Links**: Ties any response or impression to an arbitrary object in your application via a generic relation, so anonymous feedback is still traceable to its context.
 
 ## Contributing
 
