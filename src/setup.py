@@ -18,7 +18,7 @@ long_description = README.read_text(encoding='utf-8') if README.is_file() else '
 
 setup(
     name='customersatisfactionmetrics',
-    version="1.1.0",
+    version="1.1.1",
     author='Bram Mittendorff',
     author_email='bram@pescheck.io',
     description='Django app for in-product surveys: CSAT, NPS and CES with touchpoints and impression tracking',
