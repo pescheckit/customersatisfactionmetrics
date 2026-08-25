@@ -84,6 +84,19 @@ jobs:
           pipenv install --dev
       - name: Build package
         run: pipenv run python -m build src/
+      - name: Verify the release tag matches the packaged version
+        # The version lives in src/setup.py and nothing derives it from the tag,
+        # so releasing 1.1.1 while setup.py still said 1.1.0 published 1.1.0.
+        # Fail here rather than silently uploading the wrong version, which PyPI
+        # will not let us take back.
+        run: |
+          packaged="$(basename src/dist/*.tar.gz .tar.gz | sed -E 's/^.*-//')"
+          echo "tag=${GITHUB_REF_NAME} packaged=${packaged}"
+          if [ "${packaged}" != "${GITHUB_REF_NAME}" ]; then
+            echo "::error::Release tag ${GITHUB_REF_NAME} does not match the version in \
+          src/setup.py (${packaged}). PyPI would receive ${packaged}. Update src/setup.py."
+            exit 1
+          fi
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@v1.14.2
         with:
